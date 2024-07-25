@@ -1,18 +1,18 @@
 const mongoose = require('mongoose')
 const schema = mongoose.Schema
 
-const invoiceSchema = new Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Usuario',
-    required: true
-  },//se relaciona con la coleccion user(usuario que )
+const invoiceSchema = new mongoose.Schema({
+  // userId: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Usuario',
+  //   required: true
+  // },//se relaciona con la coleccion user(usuario que )
   company: {
     type: String,
     required: true
   },
   creationDate: {
-    type: Date,
+    type: Number,
     required: true
   },
   name: {

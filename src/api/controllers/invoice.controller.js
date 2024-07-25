@@ -47,14 +47,14 @@ const getInvoiceById = async (req, res) => {
 const postInvoice = async (req, res) => {
 
   try {
-    console.log(req.body)
-    const newInvoice = new Invoice(req.body)
-    
-    const createdInvoice = await newInvoice.save()
+    const body = req.body;
+    const newInvoice = new Invoice(body);
+    const createdInvoice = await newInvoice.save();
+    console.log("esto anda super bien");
     return res.json(createdInvoice)
   } catch (error) {
-    console.log(error)
-    return res.status(500).json(error)
+    console.log("hola")
+    // return res.status(500).json(error)
   }
 }
 
@@ -64,4 +64,4 @@ const updateInvoice = async (req, res) => {}
 //Eliminar una factura by Id de la factura
 const deleteInvoice = async (req, res) => {}
 
-module.exports = { getInvoice, postInvoice }
+module.exports = { postInvoice }
