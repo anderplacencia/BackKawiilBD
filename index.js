@@ -10,6 +10,7 @@ connectDB();
 
 //Configiracion del servidor con las rutas
 serve.use("/user", routerUSer);
+serve.use("/invoice", routerUSer);
 
 //servidor ejecutandose
 const PORT = 5000;

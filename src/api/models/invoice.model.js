@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const schema = mongoose.Schema
 
 const invoiceSchema = new Schema({
   userId: {
@@ -36,4 +36,5 @@ const invoiceSchema = new Schema({
     collection: "invoice",
 })
 
-module.exports = mongoose.model('invoice', invoiceSchema)
+const Invoice = mongoose.model('invoice', invoiceSchema);
+module.exports = Invoice;
