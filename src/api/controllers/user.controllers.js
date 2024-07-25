@@ -30,24 +30,55 @@ const add = async (req, res) => {
     };
 };
 
+
 // Actualizar perfil del usuario
 const updateProfile = async (req, res) => {
     try {
-        const { userId } = req.params;
-        const { name, email } = req.body;
-        const updatedUser = await User.findByIdAndUpdate(userId, { name, email }, { new: true });
-
-        if (!updatedUser) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-
-        res.status(200).json({ message: 'Perfil actualizado con éxito', user: updatedUser });
+      const { id } = req.params
+      const userBody = new User(req.body)
+      userBody._id = id
+      const editedUser = await User.findByIdAndUpdate(id, userBody, { new: true })
+      console.log(editedUser)
+      if (!editedUser) {
+        return res.status(404).json({ message: 'Error 404: usuario no encontrado.' })
+      }
+      return res.status(200).json(editedUser)
     } catch (error) {
-        res.status(500).json({ message: 'Error al actualizar el perfil', error: error.message });
+      console.log(error)
+      return res.status(500).json(error)
     }
-}
+  }
 
+//Eliminar una usuario by Id de la BD
+const deleteUserID = async (req, res) => {
+    try {
+      const id = req.params.id
+      const deleteUser = await User.findByIdAndDelete(id)
+  
+      if (!deleteUser) {
+        return res
+          .status(404)
+          .json({ message: 'Error 404: Usuario no encontrada.' })
+      }
+      return res.status(200).json(deleteUser)
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json(error)
+    }
+  }
 
+  //obtener una usuario por su Id
+const getUserById = async (req, res) => {
+    //comprobar permiso para ver la factura??
+    try {
+      const { id } = req.params // Se pasa el id en la ruta
+      //el id lo define mongo al hacer un post
+      const findUser = await User.findOne({ _id: id })
+      return res.status(200).json(findUser)
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json(error)
+    }
+  }
 
-
-module.exports = {add, updateProfile};
+module.exports = {add, updateProfile, deleteUserID, getUserById};
