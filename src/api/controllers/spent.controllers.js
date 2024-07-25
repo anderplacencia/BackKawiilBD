@@ -1,4 +1,4 @@
-const Gasto = require('../models/Gasto');
+const Spent = require('../models/spent.model');
 const bcrypt = require("bcrypt");
 
 const JWT_SECRET = "tu_super_secreto";//Cambiar a clave de jwt.

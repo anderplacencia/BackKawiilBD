@@ -1,12 +1,7 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const schema = mongoose.Schema;
 
-const GastoSchema = new Schema({
-  usuarioId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Usuario',
-    required: true
-  },
+const spentSchema = new Schema({
   descripcion: {
     type: String,
     required: true
@@ -23,7 +18,12 @@ const GastoSchema = new Schema({
     type: String,
     enum: ['pendiente', 'pagada', 'vencida'],
     default: 'pendiente'
-  }
-});
+  },
+},
+{
+    collection: "spent",
+}
+);
 
-module.exports = mongoose.model('Gasto', GastoSchema);
+const Spent = mongoose.model("spent", spentSchema);
+module.exports= Spent;

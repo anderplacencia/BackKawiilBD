@@ -1,10 +1,8 @@
-const express = require('express');
-const router = express.Router();
+const express = require("express");
+const {add} = require("../controllers/spent.controllers");
 
-const { crearGasto, obtenerGastos } = require('../controllers/spentController');
-const autenticarToken = require('../middleware/autenticarToken');
+const routerSpent = express.Router();
 
-router.post('/crear', autenticarToken, crearGasto);
-router.get('/obtener', autenticarToken, obtenerGastos);
+routerUSer.post("/addSpent", add);
 
-module.exports = router;
+module.exports = routerSpent;
