@@ -1,19 +1,18 @@
-const Spent = require('../models/spent.model');
-const bcrypt = require("bcrypt");
-
-const JWT_SECRET = "tu_super_secreto";//Cambiar a clave de jwt.
-const JWT_EXPIRES_IN = "30d";
+const Gasto = require('../models/spent.model');
 
 const crearGasto = async (req, res) => {
-  const { usuarioId, descripcion, importe, fecha, estadoFactura } = req.body;
 
   try {
-    const nuevoGasto = new Gasto({ usuarioId, descripcion, importe, fecha, estadoFactura });
-    await nuevoGasto.save();
-    res.status(201).json(nuevoGasto);
-  } catch (error) {
-    res.status(400).json({ mensaje: 'Error al crear el gasto', error });
-  }
+    const body = req.body;
+
+    const nuevoGasto = new Gasto(body);
+
+    const crearGasto = await nuevoGasto.save();
+    return res.json(crearGasto);
+} catch(error){
+  // devolver respuesta (1.3)
+  console.log(error);
+};
 };
 
 // Obtener gastos
