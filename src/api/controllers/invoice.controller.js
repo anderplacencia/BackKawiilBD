@@ -15,7 +15,6 @@ const postInvoice = async (req, res) => {
 
 //obtener una factura por su Id
 const getInvoiceById = async (req, res) => {
-  //comprobar permiso para ver la factura??
   try {
     const { id } = req.params // Se pasa el id en la ruta
     //el id lo define mongo al hacer un post
@@ -27,19 +26,7 @@ const getInvoiceById = async (req, res) => {
   }
 }
 
-//Obtener las facturas relacionadas con un usuario
-const getInvoiceByUserid = async (req, res) => {
-  //comprobar permiso para ver la factura??
-  try {
-    const { userId } = req.params // Se pasa el id en la ruta
-    //el id lo define mongo al hacer un post
-    const findInvoiceList = await Invoice.findOne({ userId: userId })
-    return res.status(200).json(findInvoiceList)
-  } catch (error) {
-    console.log(error)
-    return res.status(500).json(error)
-  }
-}
+
 
 //Editar una factura by Id de la factura
 const updateInvoiceById = async (req, res) => {
@@ -80,7 +67,6 @@ const deleteInvoiceById = async (req, res) => {
 module.exports = {
   postInvoice,
   getInvoiceById,
-  getInvoiceByUserid,
   updateInvoiceById,
   deleteInvoiceById
 }
