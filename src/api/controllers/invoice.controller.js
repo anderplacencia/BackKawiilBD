@@ -1,15 +1,14 @@
 const Invoice = require('../models/invoice.model')
 
-//Obtener las facturas relacionadas con un usuario
-const getInvoiceByUserid = async (req, res) => {
-  //comprobar permiso para ver la factura??
+
+//Subir una factura, relacionada con un usuario
+const postInvoice = async (req, res) => {
   try {
-    const { userId } = req.params // Se pasa el id en la ruta
-    //el id lo define mongo al hacer un post
-    const findInvoiceList = await Invoice.findOne({ userId: userId })
-    return res.status(200).json(findInvoiceList)
+    const body = req.body //obtener los datos de la petición del front
+    const newInvoice = new Invoice(body) //guardar los datos en formato Invoice
+    const createdInvoice = await newInvoice.save()
+    return res.json(createdInvoice)
   } catch (error) {
-    console.log(error)
     return res.status(500).json(error)
   }
 }
@@ -28,15 +27,16 @@ const getInvoiceById = async (req, res) => {
   }
 }
 
-//Subir una factura, relacionada con un usuario
-const postInvoice = async (req, res) => {
+//Obtener las facturas relacionadas con un usuario
+const getInvoiceByUserid = async (req, res) => {
+  //comprobar permiso para ver la factura??
   try {
-    const body = req.body //obtener los datos de la petición del front
-    const newInvoice = new Invoice(body) //guardar los datos en formato Invoice
-    const createdInvoice = await newInvoice.save()
-    console.log('esto anda super bien')
-    return res.json(createdInvoice)
+    const { userId } = req.params // Se pasa el id en la ruta
+    //el id lo define mongo al hacer un post
+    const findInvoiceList = await Invoice.findOne({ userId: userId })
+    return res.status(200).json(findInvoiceList)
   } catch (error) {
+    console.log(error)
     return res.status(500).json(error)
   }
 }
@@ -80,6 +80,7 @@ const deleteInvoiceById = async (req, res) => {
 module.exports = {
   postInvoice,
   getInvoiceById,
+  getInvoiceByUserid,
   updateInvoiceById,
   deleteInvoiceById
 }
