@@ -3,14 +3,14 @@ const User = require("../api/models/user.model")
 
 const isAuth = async (req, res, next) => {
     try {
-        const auth = req.headers.autorization;
+        const auth = req.headers.authorization;
 
         if(!auth){
             res.status(400).json({message: "No está autorizado"})
         }
-        console.log(auth);
-
-        const token = auth.split(" ")[1]
+        
+        const token = auth.split(" ")[1]//limpiar el authorization string
+        console.log("auth: " , token);
         const tokenVerified = verifyToken(token)
         //console.log(tokenVerified)
         if(!tokenVerified._id) {
@@ -24,7 +24,7 @@ const isAuth = async (req, res, next) => {
 
 
     } catch (error) {
-        console.loig(error)
+        console.log(error)
         
     }
 }

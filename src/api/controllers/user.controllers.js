@@ -103,7 +103,7 @@ const getUserById = async (req, res) => {
 const login = async (req, res) => {
   try {
     const userBody = req.body;
-    const userDB = await validateEmailBD(userBody.Email);
+    const userDB = await validateEmailBD(userBody.email);
     if(!userDB){
       return res.status(200).json({succes: false, message:"El email no esta registrado"})
     }
