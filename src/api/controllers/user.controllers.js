@@ -1,4 +1,5 @@
-const User = require('../models/user.model')const bcrypt = require("bcrypt");
+const User = require('../models/user.model');
+const bcrypt = require("bcrypt");
 const { validateEmailBD, validatePassword } = require("../../utils/validator");
 const { generateToken } = require("../../utils/jwt")
 
