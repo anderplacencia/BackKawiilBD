@@ -28,7 +28,7 @@ serve.use('/invoice', routerInvoice)
 
 
 //servidor ejecutandose
-const PORT = 5000
+const PORT = process.env.PORT;
 serve.listen(PORT, () => {
   console.log(`Escuchando puerto http://localhost:${PORT}`)
 })
