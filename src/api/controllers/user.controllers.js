@@ -137,5 +137,60 @@ const modifyProfile = async (req, res) => {
   return res.status(200).json({data:updateUser})
 }
 
+//relacionar una factura con un usuario
+const asignInvoice = async (req, res) => {
+  try {
+    const idUser = req.params.id //coge el idUser en la ruta
+    const idInvoice = req.body.id //coge el idInvoice del body de la request
+    console.log(idUser, idInvoice)
 
-module.exports = {add, updateProfile, deleteUserID, getUserById, login, modifyProfile };
+    const checkUser = await User.findOne({ _id: idUser })
+
+    if (!checkUser) {
+      return res
+        .status(404)
+        .json({ message: 'Error 404: usuario no encontrado.' })
+    }
+
+    if (checkUser.userInvoices.includes(idInvoice)) {
+      return res.status(404).json({
+        message: 'Error: esa factura ya está asignada a este usuario.'
+      })
+    }
+
+    //añadir comprobacion de que el id de la factura corresponde a una factura existente???##########################################################################################################################################
+
+    const editedUser = await User.findByIdAndUpdate(
+      idUser,
+      { $push: { userInvoices: idInvoice } },
+      { new: true }
+    )
+
+    return res.status(200).json(editedUser)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json(error)
+  }
+}
+
+//Obtener las facturas relacionadas con un usuario
+const getUserInvoices = async (req, res) => {
+  try {
+    const { id } = req.params
+    const findUser = await User.findOne({ _id: id }).populate("userInvoices")
+
+    if (!findUser) {
+      return res
+        .status(404)
+        .json({ message: 'Error 404: usuario no encontrado.' })
+    }
+
+    return res.status(200).json(findUser)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json(error)
+  }
+}
+
+
+module.exports = {add, updateProfile, deleteUserID, getUserById, login, modifyProfile , asignInvoice, getUserInvoices };
