@@ -1,5 +1,4 @@
-const User = require("../models/user.model");
-const bcrypt = require("bcrypt");
+const User = require('../models/user.model')const bcrypt = require("bcrypt");
 const { validateEmailBD, validatePassword } = require("../../utils/validator");
 const { generateToken } = require("../../utils/jwt")
 
@@ -51,53 +50,55 @@ const add = async (req, res) => {
 
 // Actualizar perfil del usuario
 const updateProfile = async (req, res) => {
-    try {
-      const { id } = req.params
-      const userBody = new User(req.body)
-      userBody._id = id
-      const editedUser = await User.findByIdAndUpdate(id, userBody, { new: true })
-      console.log(editedUser)
-      if (!editedUser) {
-        return res.status(404).json({ message: 'Error 404: usuario no encontrado.' })
-      }
-      return res.status(200).json(editedUser)
-    } catch (error) {
-      console.log(error)
-      return res.status(500).json(error)
+  try {
+    const { id } = req.params
+    const userBody = new User(req.body)
+    userBody._id = id
+    const editedUser = await User.findByIdAndUpdate(id, userBody, { new: true })
+    console.log(editedUser)
+    if (!editedUser) {
+      return res
+        .status(404)
+        .json({ message: 'Error 404: usuario no encontrado.' })
     }
+    return res.status(200).json(editedUser)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json(error)
   }
+}
 
 //Eliminar una usuario by Id de la BD
 const deleteUserID = async (req, res) => {
-    try {
-      const id = req.params.id
-      const deleteUser = await User.findByIdAndDelete(id)
-  
-      if (!deleteUser) {
-        return res
-          .status(404)
-          .json({ message: 'Error 404: Usuario no encontrada.' })
-      }
-      return res.status(200).json(deleteUser)
-    } catch (error) {
-      console.log(error)
-      return res.status(500).json(error)
-    }
-  }
+  try {
+    const id = req.params.id
+    const deleteUser = await User.findByIdAndDelete(id)
 
-  //obtener una usuario por su Id
-const getUserById = async (req, res) => {
-    //comprobar permiso para ver la factura??
-    try {
-      const { id } = req.params // Se pasa el id en la ruta
-      //el id lo define mongo al hacer un post
-      const findUser = await User.findOne({ _id: id })
-      return res.status(200).json(findUser)
-    } catch (error) {
-      console.log(error)
-      return res.status(500).json(error)
+    if (!deleteUser) {
+      return res
+        .status(404)
+        .json({ message: 'Error 404: Usuario no encontrada.' })
     }
+    return res.status(200).json(deleteUser)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json(error)
   }
+}
+
+//obtener una usuario por su Id
+const getUserById = async (req, res) => {
+  //comprobar permiso para ver la factura??
+  try {
+    const { id } = req.params // Se pasa el id en la ruta
+    //el id lo define mongo al hacer un post
+    const findUser = await User.findOne({ _id: id })
+    return res.status(200).json(findUser)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json(error)
+  }
+}
 
   //Validaremos el Email
 const login = async (req, res) => {

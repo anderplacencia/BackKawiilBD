@@ -1,11 +1,12 @@
 const express = require('express');
 const { postInvoice, getInvoiceById , updateInvoiceById , deleteInvoiceById} = require('../controllers/invoice.controller');
+const upload = require("../middleware/upload.file")//importa el multer
 
-const router = express.Router();
+const routerInvoice = express.Router();
 
-router.post('/addInvoice', postInvoice);
-router.get('/getInvoice/:id', getInvoiceById);
-router.put('/updateInvoice/:id', updateInvoiceById);
-router.delete('/deleteInvoice/:id', deleteInvoiceById);
+routerInvoice.post('/addInvoice', upload.single("file"), postInvoice); //upload.single gestiona validación del archivo
+routerInvoice.get('/getInvoice/:id', getInvoiceById);
+routerInvoice.put('/updateInvoice/:id', updateInvoiceById);
+routerInvoice.delete('/deleteInvoice/:id', deleteInvoiceById);
 
-module.exports = router;
+module.exports = routerInvoice;

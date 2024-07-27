@@ -26,11 +26,6 @@ const invoiceSchema = new schema({
     type: String,
     required: true
   },
-  userId: {
-    type: schema.ObjectId,
-    ref: 'User',
-    required: false
-  },//se relaciona con la coleccion user(usuario que )
 },
 {
     collection: "invoice",

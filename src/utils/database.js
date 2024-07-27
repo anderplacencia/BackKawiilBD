@@ -1,6 +1,8 @@
-
 const mongoose = require("mongoose");
-const uri= "mongodb+srv://andersonplacencia:xNIVVuB05iBr1jhL@cluster0.kdehqza.mongodb.net/KawiilDB?retryWrites=true&w=majority&appName=Cluster0";
+const env = require('dotenv')
+
+env.config()
+const uri = process.env.MONGO_URI
 
 const connectDB = async () => 
     {

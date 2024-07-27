@@ -1,0 +1,1 @@
+npm i nodemon bcrypt jsonwebtoken dotenv multer multer-storage-cloudinary@4.0.0 cloudinary@^1.21.0

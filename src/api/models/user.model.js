@@ -25,6 +25,11 @@ const userSchema = new mongoose.Schema({
     enum: ["admin", "user"],
     default: "user",
   },
+  userInvoices: [{
+    type:  schema.ObjectId,
+    ref: 'invoice',
+    required: false
+  }],//se relaciona con la coleccion invoice(facturas)
 },
 {
     collection: "user",
