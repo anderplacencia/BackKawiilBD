@@ -1,3 +1,4 @@
+const Spent = require('../models/spent.model');
 const Gasto = require('../models/spent.model');
 
 const crearGasto = async (req, res) => {
@@ -26,9 +27,9 @@ const obtenerGastos = async (req, res) => {
     res.status(400).json({ mensaje: 'Error al obtener los gastos', error });
   }
 };
-exports.eliminarGasto = async (req, res) => {
+const eliminarGasto = async (req, res) => {
   try {
-    const gasto = await Spent.findOneAndDelete({ _id: req.params.id, user: req.user.id });
+    const gasto = await Gasto.findOneAndDelete({ _id: req.params.id, user: req.user.id });
     if (!gasto) {
       return res.status(404).json({ message: 'Gasto no encontrado' });
     }
@@ -37,23 +38,25 @@ exports.eliminarGasto = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-exports.modificarGasto = async (req, res) => {
+//Editar un gasto by Id del gasto
+const modificarGasto = async (req, res) => {
   try {
-    const gasto = await Spent.findOneAndUpdate(
-      { _id: req.params.id, user: req.user.id },
-      req.body,
-      { new: true, runValidators: true }
-    );
-    if (!gasto) {
-      return res.status(404).json({ message: 'Gasto no encontrado' });
+    const { id } = req.params
+    const body = new Gasto(req.body)
+    body._id = id
+    console.log(body);
+    const cambiarGasto = await Gasto.findByIdAndUpdate(id,body, { new: true })
+    if (!cambiarGasto)
+      {
+      return res.status(404).json({ message: 'Error 404: Gasto no encontrado.' })
     }
-    res.status(200).json(gasto);
+    console.log(cambiarGasto);
+    return res.status(200).json(cambiarGasto)
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.log(error)
+    return res.status(500).json(error)
   }
-};
-
+}
 module.exports = {
   crearGasto,
   obtenerGastos,

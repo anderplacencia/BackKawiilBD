@@ -10,8 +10,9 @@ serve.use(express.json());
 connectDB();
 
 //Configiracion del servidor con las rutas
-serve.use("/user", routerUSer);
 serve.use("/spent", routerSpent);
+serve.use("/user", routerUSer);
+
 
 //servidor ejecutandose
 const PORT = 5000;
