@@ -27,9 +27,10 @@ const obtenerGastos = async (req, res) => {
     res.status(400).json({ mensaje: 'Error al obtener los gastos', error });
   }
 };
+
 const eliminarGasto = async (req, res) => {
   try {
-    const gasto = await Gasto.findOneAndDelete({ _id: req.params.id, user: req.user.id });
+    const gasto = await Gasto.findOneAndDelete({ _id: req.params.id });
     if (!gasto) {
       return res.status(404).json({ message: 'Gasto no encontrado' });
     }
@@ -38,19 +39,19 @@ const eliminarGasto = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 //Editar un gasto by Id del gasto
 const modificarGasto = async (req, res) => {
   try {
     const { id } = req.params
     const body = new Gasto(req.body)
     body._id = id
-    console.log(body);
     const cambiarGasto = await Gasto.findByIdAndUpdate(id,body, { new: true })
     if (!cambiarGasto)
       {
       return res.status(404).json({ message: 'Error 404: Gasto no encontrado.' })
     }
-    console.log(cambiarGasto);
+    
     return res.status(200).json(cambiarGasto)
   } catch (error) {
     console.log(error)
