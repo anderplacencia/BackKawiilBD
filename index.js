@@ -29,6 +29,13 @@ serve.use('/invoice', routerInvoice)
 
 //servidor ejecutandose
 const PORT = 5000
+
+application.get("/",(req,res)=>{
+  res.send("Estamos en Vercel")
+})
 serve.listen(PORT, () => {
   console.log(`Escuchando puerto http://localhost:${PORT}`)
 })
+
+
+module.exports = app;
