@@ -26,8 +26,38 @@ const obtenerGastos = async (req, res) => {
     res.status(400).json({ mensaje: 'Error al obtener los gastos', error });
   }
 };
+exports.eliminarGasto = async (req, res) => {
+  try {
+    const gasto = await Spent.findOneAndDelete({ _id: req.params.id, user: req.user.id });
+    if (!gasto) {
+      return res.status(404).json({ message: 'Gasto no encontrado' });
+    }
+    res.status(200).json({ message: 'Gasto eliminado con éxito' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.modificarGasto = async (req, res) => {
+  try {
+    const gasto = await Spent.findOneAndUpdate(
+      { _id: req.params.id, user: req.user.id },
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!gasto) {
+      return res.status(404).json({ message: 'Gasto no encontrado' });
+    }
+    res.status(200).json(gasto);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 
 module.exports = {
   crearGasto,
-  obtenerGastos
+  obtenerGastos,
+  eliminarGasto,
+  modificarGasto
+
 };
