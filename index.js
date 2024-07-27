@@ -1,6 +1,6 @@
 //import de dependencias
 const express = require('express')
-const { connectBD, connectDB } = require('./src/utils/database')
+const { connectDB } = require('./src/utils/database')
 const routerUSer = require('./src/api/routes/user.routes')
 const routerInvoice = require('./src/api/routes/invoice.routes')
 const env = require('dotenv')

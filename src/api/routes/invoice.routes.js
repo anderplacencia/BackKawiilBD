@@ -1,6 +1,6 @@
 const express = require('express');
 const { postInvoice, getInvoiceById , updateInvoiceById , deleteInvoiceById} = require('../controllers/invoice.controller');
-const upload = require("../middleware/upload.file")//importa el multer
+const upload = require("../../middleware/upload.file")//importa el multer
 
 const routerInvoice = express.Router();
 
