@@ -14,6 +14,7 @@ cloudinary.config({
   api_key: process.env.API_KEY_CLOUD,
   api_secret: process.env.API_SECRET_CLOUD
 })
+const routerSpent = require("./src/api/routes/spent.routes")
 
 //Configuración del servidor
 const serve = express()
@@ -21,8 +22,10 @@ serve.use(express.json())
 connectDB()
 
 //Configuracion del servidor con las rutas
+serve.use("/spent", routerSpent);
 serve.use('/user', routerUSer)
 serve.use('/invoice', routerInvoice)
+
 
 //servidor ejecutandose
 const PORT = 5000
