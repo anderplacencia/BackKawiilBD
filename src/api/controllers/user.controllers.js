@@ -11,8 +11,14 @@ const add = async (req, res) => {
     try{
         //obtenemos los datos del front (1.1)
         const body = req.body;
+        const {name, email, password, role} = req.body;
         //creamos los datos de usuario con la estructura de models
-        const newUser = new User (body);
+          const newUser = new User ({
+            name,
+            email,
+            password: password,
+            role: "user"
+          });
         //En este paso evitamos que se cree un usuario ya existente
         const findUser = await User.find ({ name: req.body.name })
         if (findUser.length !== 0) {
