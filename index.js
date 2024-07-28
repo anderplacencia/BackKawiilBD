@@ -5,6 +5,7 @@ const routerUSer = require('./src/api/routes/user.routes')
 const routerInvoice = require('./src/api/routes/invoice.routes')
 const env = require('dotenv')
 const cloudinary = require('cloudinary').v2
+const cors = require("cors")
 
 env.config() //variable de entorno para configurar el servidor
 
@@ -20,6 +21,8 @@ const routerSpent = require("./src/api/routes/spent.routes")
 const serve = express()
 serve.use(express.json())
 connectDB()
+
+app.use(cors())
 
 //Configuracion del servidor con las rutas
 serve.use("/spent", routerSpent);
