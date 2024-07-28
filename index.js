@@ -17,17 +17,20 @@ cloudinary.config({
 })
 const routerSpent = require("./src/api/routes/spent.routes")
 
+
+
 //Configuración del servidor
 const serve = express()
 serve.use(express.json())
 connectDB()
 
-app.use(cors())
+serve.use(cors())
 
 //Configuracion del servidor con las rutas
 serve.use("/spent", routerSpent);
 serve.use('/user', routerUSer)
 serve.use('/invoice', routerInvoice)
+
 
 
 //servidor ejecutandose
