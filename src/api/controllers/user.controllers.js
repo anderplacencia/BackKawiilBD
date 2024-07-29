@@ -10,8 +10,7 @@ const { generateToken } = require('../../utils/jwt')
 const add = async (req, res) => {
   try {
     //obtenemos los datos del front (1.1)
-    const body = req.body
-    const { name, email, password, role } = req.body
+    const { name, email, surname, password } = req.body
     //creamos los datos de usuario con la estructura de models
     const newUser = new User({
       name,
