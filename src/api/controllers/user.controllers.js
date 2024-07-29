@@ -15,6 +15,7 @@ const add = async (req, res) => {
         //creamos los datos de usuario con la estructura de models
           const newUser = new User ({
             name,
+            surname,
             email,
             password: password,
             role: "user"
