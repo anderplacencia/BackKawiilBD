@@ -1,8 +1,8 @@
-const user = require ("../api/models/user.model");
+const User = require ("../api/models/user.model");
 
-const validateEmailBD = async (emailUSer) => {
+const validateEmailBD = async (emailUser) => {
     try {
-        const validateEmail = await user.findOne ({email : emailUSer});
+        const validateEmail = await User.findOne ({email : emailUser});
         return validateEmail;
     } catch (error) {
         console.log(error);

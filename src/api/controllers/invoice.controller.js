@@ -5,24 +5,15 @@ const Invoice = require('../models/invoice.model')
 const postInvoice = async (req, res) => {
   try {
     const body = req.body //obtener los datos de la petición del front
-    const {company, creationDate, name, description, amount, file} = req.body;
-    
+    console.log("body inicial: ", body)
     //el multer envia por la request (req.file.path) la donde está la imagen en cloudinary 
-    if(req.file.path){
+    if(req.file){
       body.file = req.file.path
     }
 
-    const newInvoice = new Invoice ({
-      company,
-      creationDate,
-      name,
-      description,
-      amount,
-      file
-    });
-
-    // const newInvoice = new Invoice(body) //guardar los datos en formato Invoice
+    const newInvoice = new Invoice(body) //guardar los datos en formato Invoice
     const createdInvoice = await newInvoice.save()
+    console.log(createdInvoice)
     return res.json(createdInvoice)
   } catch (error) {
     return res.status(500).json(error)

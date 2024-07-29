@@ -19,15 +19,12 @@ const add = async (req, res) => {
       password: password,
       role: 'user'
     })
+    //console.log('newUser: ', newUser)
+
     //En este paso evitamos que se cree un usuario ya existente
-    const findUser = await User.find({ email: email })
-    if (findUser.length !== 0) {
-      return res.json({ message: 'Este usuario ya existe' })
-    }
-    //guardar datos en la coleccion de BD (1.2)
-    const createdUser = await newUser.save()
+    
     //validar Email
-    const valEmail = await validateEmailBD(req.body.Email)
+    const valEmail = await validateEmailBD(req.body.email)
     console.log(valEmail) //Devuelve null si no encuentra el Email en la BD
     if (!valEmail) {
       //La contraseña debe cumplir con el patron requerido
@@ -35,25 +32,27 @@ const add = async (req, res) => {
       if (valPassword) {
         //Encriptar la contraseña antes de hacer el registro
         newUser.password = bcrypt.hashSync(newUser.password, 10)
-        const createdUserP = await newUser.save()
-        return res.status(200).json({ success: true, data: createdUserP })
+        const createdUser = await newUser.save()
+        // devolver respuesta (1.3)
+        return res.status(200).json({
+          succes: true,
+          data: createdUser
+        })
       } else {
-        return res
-          .status(200)
-          .json({
-            success: false,
-            message: 'La contraseña no cumple con los parametros'
-          })
+        return res.status(200).json({
+          success: false,
+          message: 'La contraseña no cumple con los parametros'
+        })
       }
     }
-    // devolver respuesta (1.3)
-    return res.json({
-      succes: true,
-      user: createdUser
+    return res.status(200).json({
+      success: false,
+      message: 'El correo ya está registrado'
     })
   } catch (error) {
     // devolver respuesta (1.3)
     console.log(error)
+    return res.status(500).json(error);
   }
 }
 
@@ -122,10 +121,11 @@ const login = async (req, res) => {
         .json({ succes: false, message: 'El email no esta registrado' })
     }
     //si no coinciden las contraseñas:
-    if (!bcrypt.compareSync(userBody.password, userDB.password))
+    if (!bcrypt.compareSync(userBody.password, userDB.password)) {
       return res
         .status(200)
-        .json({ succes: true, message: 'contraseña invalida' })
+        .json({ succes: false, message: 'contraseña invalida' })
+    }
 
     //generamos el token
     const token = generateToken({
@@ -134,8 +134,7 @@ const login = async (req, res) => {
       _id: userDB.id
     })
 
-    return res.status(200).json({ succes: true, token: token, user: userDB
-    })
+    return res.status(200).json({ succes: true, token: token, user: userDB })
   } catch (error) {
     return res.status(500).json(error)
   }
