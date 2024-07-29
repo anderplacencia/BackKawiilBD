@@ -10,17 +10,17 @@ const { generateToken } = require('../../utils/jwt')
 const add = async (req, res) => {
   try {
     //obtenemos los datos del front (1.1)
-    const { name, email, surname, password } = req.body
+    const { name, surname, email, password } = req.body
     //creamos los datos de usuario con la estructura de models
     const newUser = new User({
-      name,
-      surname,
-      email,
+      name: name,
+      surname: surname,
+      email: email,
       password: password,
       role: 'user'
     })
     //En este paso evitamos que se cree un usuario ya existente
-    const findUser = await User.find({ name: req.body.name })
+    const findUser = await User.find({ email: email })
     if (findUser.length !== 0) {
       return res.json({ message: 'Este usuario ya existe' })
     }
@@ -46,14 +46,10 @@ const add = async (req, res) => {
           })
       }
     }
-    return res
-      .status(200)
-      .json({ success: false, message: 'El Email ya está registrado' })
-    //console.log("holis");
     // devolver respuesta (1.3)
     return res.json({
       succes: true,
-      student: createdUser
+      user: createdUser
     })
   } catch (error) {
     // devolver respuesta (1.3)
@@ -116,17 +112,17 @@ const getUserById = async (req, res) => {
 //Validaremos el Email
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body
+    const userBody = req.body
     //buscamos y validamos el usuario por su email
-    const userDB = await validateEmailBD(email)
+    const userDB = await validateEmailBD(userBody.email)
     //si no se encuentra usuario:
     if (!userDB) {
       return res
         .status(200)
         .json({ succes: false, message: 'El email no esta registrado' })
     }
-    //si no coinciden las ccontraseñas:
-    if (!bcrypt.compareSync(password, userDB.password))
+    //si no coinciden las contraseñas:
+    if (!bcrypt.compareSync(userBody.password, userDB.password))
       return res
         .status(200)
         .json({ succes: true, message: 'contraseña invalida' })
