@@ -207,7 +207,7 @@ const getUserInvoices = async (req, res) => {
         .json({ message: 'Error 404: usuario no encontrado.' })
     }
 
-    return res.status(200).json(findUser)
+    return res.status(200).json(findUser.userInvoices)
   } catch (error) {
     console.log(error)
     return res.status(500).json(error)
