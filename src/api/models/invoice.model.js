@@ -24,7 +24,7 @@ const invoiceSchema = new schema({
   },
   file: {
     type: String,
-    required: true
+    default: ""
   },
 },
 {

@@ -10,24 +10,21 @@ const { generateToken } = require('../../utils/jwt')
 const add = async (req, res) => {
   try {
     //obtenemos los datos del front (1.1)
-    const { name, email, surname, password } = req.body
+    const { name, surname, email, password } = req.body
     //creamos los datos de usuario con la estructura de models
     const newUser = new User({
-      name,
-      surname,
-      email,
+      name: name,
+      surname: surname,
+      email: email,
       password: password,
       role: 'user'
     })
+    //console.log('newUser: ', newUser)
+
     //En este paso evitamos que se cree un usuario ya existente
-    const findUser = await User.find({ name: req.body.name })
-    if (findUser.length !== 0) {
-      return res.json({ message: 'Este usuario ya existe' })
-    }
-    //guardar datos en la coleccion de BD (1.2)
-    const createdUser = await newUser.save()
+    
     //validar Email
-    const valEmail = await validateEmailBD(req.body.Email)
+    const valEmail = await validateEmailBD(req.body.email)
     console.log(valEmail) //Devuelve null si no encuentra el Email en la BD
     if (!valEmail) {
       //La contraseña debe cumplir con el patron requerido
@@ -35,29 +32,27 @@ const add = async (req, res) => {
       if (valPassword) {
         //Encriptar la contraseña antes de hacer el registro
         newUser.password = bcrypt.hashSync(newUser.password, 10)
-        const createdUserP = await newUser.save()
-        return res.status(200).json({ success: true, data: createdUserP })
+        const createdUser = await newUser.save()
+        // devolver respuesta (1.3)
+        return res.status(200).json({
+          succes: true,
+          data: createdUser
+        })
       } else {
-        return res
-          .status(200)
-          .json({
-            success: false,
-            message: 'La contraseña no cumple con los parametros'
-          })
+        return res.status(200).json({
+          success: false,
+          message: 'La contraseña no cumple con los parametros'
+        })
       }
     }
-    return res
-      .status(200)
-      .json({ success: false, message: 'El Email ya está registrado' })
-    //console.log("holis");
-    // devolver respuesta (1.3)
-    return res.json({
-      succes: true,
-      student: createdUser
+    return res.status(200).json({
+      success: false,
+      message: 'El correo ya está registrado'
     })
   } catch (error) {
     // devolver respuesta (1.3)
     console.log(error)
+    return res.status(500).json(error);
   }
 }
 
@@ -116,20 +111,21 @@ const getUserById = async (req, res) => {
 //Validaremos el Email
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body
+    const userBody = req.body
     //buscamos y validamos el usuario por su email
-    const userDB = await validateEmailBD(email)
+    const userDB = await validateEmailBD(userBody.email)
     //si no se encuentra usuario:
     if (!userDB) {
       return res
         .status(200)
         .json({ succes: false, message: 'El email no esta registrado' })
     }
-    //si no coinciden las ccontraseñas:
-    if (!bcrypt.compareSync(password, userDB.password))
+    //si no coinciden las contraseñas:
+    if (!bcrypt.compareSync(userBody.password, userDB.password)) {
       return res
         .status(200)
-        .json({ succes: true, message: 'contraseña invalida' })
+        .json({ succes: false, message: 'contraseña invalida' })
+    }
 
     //generamos el token
     const token = generateToken({
@@ -138,10 +134,13 @@ const login = async (req, res) => {
       _id: userDB.id
     })
 
-    return res.status(200).json({ succes: true, token: token, user: userDB
-    })
+    const findUser = await User.findOne({ _id: userDB.id }).populate('userInvoices')
+
+    return res.status(200).json({ succes: true, token: token, user: findUser })
   } catch (error) {
+    console.log(error)
     return res.status(500).json(error)
+    
   }
 }
 
