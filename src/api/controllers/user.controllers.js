@@ -134,9 +134,13 @@ const login = async (req, res) => {
       _id: userDB.id
     })
 
-    return res.status(200).json({ succes: true, token: token, user: userDB })
+    const findUser = await User.findOne({ _id: userDB.id }).populate('userInvoices')
+
+    return res.status(200).json({ succes: true, token: token, user: findUser })
   } catch (error) {
+    console.log(error)
     return res.status(500).json(error)
+    
   }
 }
 
